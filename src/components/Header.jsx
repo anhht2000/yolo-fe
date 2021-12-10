@@ -1,6 +1,6 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, Link } from "react-router-dom";
 import logo from "../assets/images/Logo-2.png";
 import {
   FaBars,
@@ -46,7 +46,7 @@ function Header(props) {
           menu === false ? "header__navleft" : "header__navleft active"
         }
       >
-        <NavLink axact={true} to="/" className="header__navleft__link">
+        <NavLink to="/" className="header__navleft__link">
           trang chủ
         </NavLink>
         <NavLink to="/products" className="header__navleft__link">
@@ -67,7 +67,9 @@ function Header(props) {
           <FaSearch icon="faSearch" />
         </span>
         <span>
-          <FaCartArrowDown icon="faCartArrowDown" />
+          <Link to="/cart">
+            <FaCartArrowDown icon="faCartArrowDown" />
+          </Link>
         </span>
         <span>
           <FaUser icon="faUser" />
@@ -78,19 +80,3 @@ function Header(props) {
 }
 
 export default Header;
-
-// import {
-//   faBars,
-//   faCartArrowDown,
-//   faSearch,
-//   faTimes,
-//   faUser,
-// } from "@fortawesome/free-solid-svg-icons";
-// import logo from "./../../images/Logo-2.png";
-
-//   return (
-
-//   );
-// }
-
-// export default Header;

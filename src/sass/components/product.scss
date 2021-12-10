@@ -63,13 +63,25 @@
       text-align: center;
       font-size: 1.7rem;
       font-weight: 700;
-      padding: 1.5rem 0;
+      margin: 1.5rem 0;
+      white-space: pre-wrap;
+      @include xs-screen {
+        display: -webkit-box;
+        width: 90%;
+        overflow: hidden;
+        text-overflow: ellipsis; //thêm 3 dấu chấm ở cuối
+        -webkit-line-clamp: 1; // số dòng muốn hiển thị
+        -webkit-box-orient: vertical;
+      }
     }
     &-price {
       --lineHeight: 2rem;
       display: flex;
       justify-content: space-between;
       padding: 0 2rem;
+      @include xs-screen {
+        padding: 0 0.5rem;
+      }
       & span:first-child {
         color: $dark;
         font-weight: 700;
@@ -80,9 +92,30 @@
         color: $text-color;
         font-size: 1.6rem;
         line-height: var(--lineHeight);
-        text-decoration: line-through;
         font-weight: 500;
       }
     }
   }
+}
+
+.product-red {
+  background-color: red;
+}
+.product-white {
+  background-color: white;
+}
+.product-pink {
+  background-color: pink;
+}
+.product-black {
+  background-color: black;
+}
+.product-yellow {
+  background-color: yellow;
+}
+.product-orange {
+  background-color: orange;
+}
+.product-blue {
+  background-color: blue;
 }

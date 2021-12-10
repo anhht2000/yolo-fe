@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import banner from "../assets/images/banner.png";
 
 import Helmet from "../components/Helmet";
@@ -17,9 +17,9 @@ function Home(props) {
   // console.log(heroSliderData);
   const sellingDatas = data.getProducts(4);
   const newDatas = data.getProducts(8);
-  const popularDatas = data.getProducts(12)
+  const popularDatas = data.getProducts(12);
   return (
-    <Helmet>
+    <Helmet title="Home">
       <Section>
         <Slide slides={heroSliderData} />
       </Section>
@@ -43,7 +43,7 @@ function Home(props) {
       </Section>
       <SectionTitle>
         <h1>phổ biến</h1>
-        </SectionTitle>
+      </SectionTitle>
       <Section>
         <Popular populars={popularDatas} />
       </Section>

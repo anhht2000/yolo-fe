@@ -1,13 +1,13 @@
-import React from 'react'
+import React from "react";
 
 function Button(props) {
-    return (
-        <div className="button">
+  return (
+    <div className="button">
       <span>
-        <a to='/'>{props.content}</a>
+        <a to="/">{props.children}</a>
       </span>
     </div>
-    )
+  );
 }
 
-export default Button
+export default Button;
