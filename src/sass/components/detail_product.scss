@@ -113,10 +113,15 @@
         gap: 4rem;
         @include sm-screen {
           gap: 0;
+          display: unset;
+          & .button span {
+            width: 100%;
+            text-align: center;
+          }
         }
-        & > div {
-          width: 50%;
-        }
+        // & > div {
+        //   width: 50%;
+        // }
       }
     }
   }

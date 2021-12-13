@@ -24,9 +24,15 @@ function ProductCart(props) {
         <p className="product__item__info-title">{props.datas.title}</p>
         <p className="product__item__info-price">
           <span>{FormatNumber(props.datas.price)}</span>
-          <span><del>399,000</del></span>
+          <span>
+            <del>399,000</del>
+          </span>
         </p>
-        <Button > mua ngay </Button>
+        <div className="button">
+          <span>
+            <Link to={`/catalog/${props.datas.slug}`}>mua ngay</Link>
+          </span>
+        </div>
       </div>
     </div>
   );

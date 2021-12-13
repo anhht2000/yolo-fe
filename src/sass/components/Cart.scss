@@ -2,9 +2,19 @@
   margin-top: $headerHeight;
   padding: 3rem;
   display: flex;
+  flex-wrap: wrap;
   gap: 2rem;
+  @include sm-screen {
+  padding: 1rem;
+  }
   &__checkout {
     width: 30%;
+    @include sm-screen {
+      width: 20%;
+    }
+    @include xs-screen {
+      width: 100%;
+    }
     &__title {
       font-size: 1.5rem;
       font-weight: 500;
@@ -33,11 +43,14 @@
         text-align: center;
         font-weight: 700;
         width: 100%;
+        @include xs-screen {
+          width: 80%;
+        }
       }
     }
   }
   &__info {
-    width: 70%;
+    flex: 1;
     text-align: center;
     &-item {
       display: flex;

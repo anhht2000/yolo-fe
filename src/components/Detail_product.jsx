@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 import { useCart } from "react-use-cart";
-import Button from "./Button";
+import {Link} from "react-router-dom";
 import FormatNumber from "../number/FormatNumber";
 
 function DetailProduct({ datas }) {
@@ -75,7 +75,9 @@ function DetailProduct({ datas }) {
             <div onClick={() => addItem(datas)} className="button">
               <span> thêm giỏ hàng</span>
             </div>
-            <Button>mua ngay</Button>
+            <div  onClick={() => addItem(datas)} className="button" >
+              <span>{<Link to="/cart">mua ngay</Link>}</span>
+            </div>
           </div>
         </div>
       </div>
