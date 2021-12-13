@@ -66,9 +66,12 @@
           width: var(--size);
           height: var(--size);
           border-radius: 90rem;
-          border: 1px solid $primary;
+          border: 1px solid $text-color;
           cursor: pointer;
           padding: 2rem;
+          &.active {
+            border: 2px solid $primary;
+          }
         }
       }
       &-list__size {
@@ -84,10 +87,13 @@
           width: var(--size);
           height: var(--size);
           border-radius: 90rem;
-          border: 1px solid $primary;
+          border: 1px solid $text-color;
           cursor: pointer;
           line-height: var(--size);
           font-size: 2.2rem;
+          &.active {
+            border: 2px solid $primary;
+          }
         }
       }
       &__quantity {

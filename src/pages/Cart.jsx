@@ -9,6 +9,7 @@ import FormatNumber from "../number/FormatNumber";
 function Cart() {
   const { cartTotal, totalUniqueItems, items, updateItemQuantity, removeItem } =
     useCart();
+    console.log(items);
   return (
     <Helmet title="cart">
       <Section>
@@ -34,9 +35,9 @@ function Cart() {
             {items.map((item, index) => (
               <div className="cart__info-item" key={index}>
                 <div className="cart__info-item__img">
-                  <img src={item.image01} alt="" />
+                  <img src={item.image} alt="" />
                 </div>
-                <h3 className="cart__info-item__title">{item.title}</h3>
+                <h3 className="cart__info-item__title">{item.title}-<span>{item.color}</span>-{item.size}</h3>
                 <h3 className="cart__info-item__price">
                   {FormatNumber(item.price)}
                 </h3>

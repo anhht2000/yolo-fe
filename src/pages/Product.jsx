@@ -12,7 +12,6 @@ function Product() {
   let params = useParams();
   const product = productData.getProductBySlug(params.slug);
   const suggestProduct = productData.getProducts(8);
-  console.log(product);
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, [product]);
