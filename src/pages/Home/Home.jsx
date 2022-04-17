@@ -1,17 +1,17 @@
 import React, { useEffect } from "react";
-import banner from "../assets/images/banner.png";
+import banner from "../../assets/images/banner.png";
 
-import Helmet from "../components/Helmet";
-import { Section, SectionTitle } from "../components/Section";
-import Slide from "../components/Slide";
-import Policy from "../components/Policy";
-import Selling from "../components/Selling";
-import New from "../components/New";
-import Popular from "../components/Popular";
+import Helmet from "../../components/Helmet";
+import { Section, SectionTitle } from "../../components/Section";
+import Slide from "../../components/Slide";
+import Policy from "../../components/Policy";
+import Selling from "../../components/Selling";
+import New from "../../components/New";
+import Popular from "../../components/Popular";
 
-import heroSliderData from "../assets/fake-data/slide";
-import policy from "../assets/fake-data/policy";
-import data from "../assets/fake-data/product";
+import heroSliderData from "../../assets/fake-data/slide";
+import policy from "../../assets/fake-data/policy";
+import data from "../../assets/fake-data/product";
 
 function Home(props) {
   // console.log(heroSliderData);

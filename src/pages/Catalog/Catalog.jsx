@@ -1,14 +1,14 @@
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { BsArrowLeft } from "react-icons/bs";
-import Helmet from "../components/Helmet";
-import CheckBox from "../components/CheckBox";
+import Helmet from "../../components/Helmet";
+import CheckBox from "../../components/CheckBox";
 
-import List_Products from "../components/List_Products";
+import List_Products from "../../components/List_Products";
 // data
-import colors from "../assets/fake-data/product-color";
-import sizes from "../assets/fake-data/product-size";
-import categorys from "../assets/fake-data/category";
-import productData from "../assets/fake-data/product";
+import colors from "../../assets/fake-data/product-color";
+import sizes from "../../assets/fake-data/product-size";
+import categorys from "../../assets/fake-data/category";
+import productData from "../../assets/fake-data/product";
 
 function Products() {
   const initFilter = {
@@ -43,9 +43,7 @@ function Products() {
     } else {
       switch (type) {
         case "CATEGORY":
-          const newCategory = filter.category.filter(
-            (e) => e !== item.categorySlug
-          );
+          const newCategory = filter.category.filter((e) => e !== item.categorySlug);
           setFilter({ ...filter, category: newCategory });
           break;
         case "COLOR":
@@ -99,27 +97,17 @@ function Products() {
       <div className="products">
         {/* <Filter change={filterSelect} colors={colors} sizes={sizes} categorys={categorys} /> */}
         <div className="catalog__filter" ref={filterRef}>
-          <div
-            className="catalog__filter__close"
-            onClick={() => showHideFilter()}
-          >
+          <div className="catalog__filter__close" onClick={() => showHideFilter()}>
             <BsArrowLeft />
           </div>
           <div className="catalog__filter__widget">
-            <div className="catalog__filter__widget__title">
-              danh mục sản phẩm
-            </div>
+            <div className="catalog__filter__widget__title">danh mục sản phẩm</div>
             <div className="catalog__filter__widget__content">
               {categorys.map((item, index) => (
-                <div
-                  key={index}
-                  className="catalog__filter__widget__content__item"
-                >
+                <div key={index} className="catalog__filter__widget__content__item">
                   <CheckBox
                     label={item.display}
-                    onChange={(input) =>
-                      filterSelect("CATEGORY", input.checked, item)
-                    }
+                    onChange={(input) => filterSelect("CATEGORY", input.checked, item)}
                     checked={filter.category.includes(item.categorySlug)}
                   />
                 </div>
@@ -131,15 +119,10 @@ function Products() {
             <div className="catalog__filter__widget__title">màu sắc</div>
             <div className="catalog__filter__widget__content">
               {colors.map((item, index) => (
-                <div
-                  key={index}
-                  className="catalog__filter__widget__content__item"
-                >
+                <div key={index} className="catalog__filter__widget__content__item">
                   <CheckBox
                     label={item.display}
-                    onChange={(input) =>
-                      filterSelect("COLOR", input.checked, item)
-                    }
+                    onChange={(input) => filterSelect("COLOR", input.checked, item)}
                     checked={filter.color.includes(item.color)}
                   />
                 </div>
@@ -151,15 +134,10 @@ function Products() {
             <div className="catalog__filter__widget__title">kích cỡ</div>
             <div className="catalog__filter__widget__content">
               {sizes.map((item, index) => (
-                <div
-                  key={index}
-                  className="catalog__filter__widget__content__item"
-                >
+                <div key={index} className="catalog__filter__widget__content__item">
                   <CheckBox
                     label={item.display}
-                    onChange={(input) =>
-                      filterSelect("SIZE", input.checked, item)
-                    }
+                    onChange={(input) => filterSelect("SIZE", input.checked, item)}
                     checked={filter.size.includes(item.size)}
                   />
                 </div>

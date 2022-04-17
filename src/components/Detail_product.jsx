@@ -10,8 +10,7 @@ function DetailProduct({ datas }) {
   const [quantity, setquantity] = useState();
   const [color, setColor] = useState(undefined);
   const [size, setSize] = useState(undefined);
-  const [target, setTarget] = useState ();
-  console.log(quantity);
+  const [target, setTarget] = useState();
   useEffect(() => {
     setImage(datas.image01);
     setquantity(1);
@@ -58,19 +57,11 @@ function DetailProduct({ datas }) {
           />
         </div>
         <div className="detail-product__wrap__slide-2">
-          <img
-            src={image}
-            alt=""
-            className="detail-product__wrap__slide-2__img"
-          />
+          <img src={image} alt="" className="detail-product__wrap__slide-2__img" />
         </div>
         <div className="detail-product__wrap__slide-3">
-          <h2 className="detail-product__wrap__slide-3__title">
-            {datas.title}
-          </h2>
-          <p className="detail-product__wrap__slide-3__price">
-            {FormatNumber(datas.price)}
-          </p>
+          <h2 className="detail-product__wrap__slide-3__title">{datas.title}</h2>
+          <p className="detail-product__wrap__slide-3__price">{FormatNumber(datas.price)}</p>
           <p className="detail-product__wrap__slide-3__labe">màu sắc</p>
           <div className="detail-product__wrap__slide-3-list__color">
             {datas.colors.map((item, i) => (
@@ -106,10 +97,7 @@ function DetailProduct({ datas }) {
           <div className="detail-product__wrap__slide-3-list__btn">
             <div
               onClick={() => {
-                if (
-                  checkDataToCart.color != undefined &&
-                  checkDataToCart.size != undefined
-                ) {
+                if (checkDataToCart.color !== undefined && checkDataToCart.size !== undefined) {
                   addItem(checkDataToCart);
                   alert(" đã thêm vào giỏ hàng ");
                 } else {
@@ -122,10 +110,7 @@ function DetailProduct({ datas }) {
             </div>
             <div
               onClick={() => {
-                if (
-                  checkDataToCart.color != undefined &&
-                  checkDataToCart.size != undefined
-                ) {
+                if (checkDataToCart.color !== undefined && checkDataToCart.size !== undefined) {
                   addItem(checkDataToCart);
                   alert(" đã thêm vào giỏ hàng ");
                 } else {
@@ -139,22 +124,11 @@ function DetailProduct({ datas }) {
           </div>
         </div>
       </div>
-      <div
-        className={`detail-product__description ${
-          statusDescription ? " active" : ""
-        }`}
-      >
-        <h1 className="detail-product__description__title">
-          chi tiết sản phẩm
-        </h1>
-        <p
-          className="detail-product__description__item"
-          dangerouslySetInnerHTML={{ __html: datas.description }}
-        ></p>
+      <div className={`detail-product__description ${statusDescription ? " active" : ""}`}>
+        <h1 className="detail-product__description__title">chi tiết sản phẩm</h1>
+        <p className="detail-product__description__item" dangerouslySetInnerHTML={{ __html: datas.description }}></p>
         <span
-          className={`detail-product__description__btn-hs ${
-            statusDescription ? " active" : ""
-          }`}
+          className={`detail-product__description__btn-hs ${statusDescription ? " active" : ""}`}
           onClick={handleStatusDescription}
         >
           {statusDescription ? "thu gọn" : "xem thêm "}

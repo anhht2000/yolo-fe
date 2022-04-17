@@ -1,5 +1,21 @@
+.container__header {
+  position: fixed;
+  height: 50px;
+  top: 0;
+  right: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  min-height: $headerHeight;
+  // z-index: 1;
+  // box-shadow: $box-shadow;
+  &.shrink {
+    z-index: 100;
+    box-shadow: $box-shadow;
+    height: $header-shrink-height;
+  }
+}
 .header {
-  max-width: $wbody;
   min-height: $headerHeight;
   width: 100%;
   position: fixed;
@@ -7,17 +23,13 @@
   left: 0;
   right: 0;
   margin: auto;
-  background-color: $light;
   transition: 1s ease;
-  &.shrink {
-    z-index: 100;
-    box-shadow: $box-shadow;
-    height: $header-shrink-height;
-  }
+  background-color: white;
+  max-width: $wbody;
+
   @include md-screen {
     padding: 0 4%;
     z-index: 100;
-
   }
   @include sm-screen {
     padding: 0 4%;
@@ -85,7 +97,7 @@
       }
     }
     &__link {
-    z-index: 10000;
+      z-index: 10000;
       font-weight: 600;
       &_active {
         font-size: 2rem;
