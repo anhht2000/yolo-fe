@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const axiosClient = axios.create({
-  baseURL: "http://127.0.0.1:8081/api/v1",
+  baseURL: process.env.REACT_APP_BASE_URL,
   // responseType: "json"
   headers: {
     "Content-type": "application/json",
@@ -11,22 +11,20 @@ const axiosClient = axios.create({
 
 axiosClient.interceptors.request.use(
   (config) => {
-    // if (!config.headers.authorization) {
-    //   const token = localStorage.getItem("token");
-    //   if (token) {
-    //     config.headers.authorization = `bearer ${token}`;
-    //   }
-    // }
+    if (!config.headers.authorization) {
+      const token = localStorage.getItem("token");
+      if (token) {
+        config.headers.authorization = `Bearer ${token}`;
+      }
+    }
     return config;
   },
   (error) => {}
 );
 
 axiosClient.interceptors.response.use(
-  (axiosResponse) => {
-    return axiosResponse;
-  },
-  (error) => {}
+  (response) => response,
+  async (error) => Promise.reject(error.response)
 );
 
 export const fetch = (request) => axiosClient.request(request);

@@ -1,7 +1,19 @@
 /* eslint-disable jsx-a11y/img-redundant-alt */
-import React from "react";
+import React, { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "../hooks/redux.hook";
+import { getIsLogin } from "../redux/reducers/auth.reducer";
 
 export default function AuthLayout({ children }) {
+  const isLogin = useAppSelector(getIsLogin)
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if(isLogin){
+      navigate('/')
+    }
+  }, []);
+
   return (
     <section className="vh-100 d-flex" style={{ fontSize: "1rem" }}>
       <div className="container h-custom app__container">

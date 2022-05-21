@@ -3,7 +3,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import WarningAmberOutlinedIcon from "@mui/icons-material/WarningAmberOutlined";
 import { Button, Card, Modal } from "@mui/material";
 import React, { useCallback, useMemo } from "react";
-import useCommon from "../../../hooks/common";
+import useCommon from "../../hooks/common";
 import "./styles.scss";
 
 const MessageDialog = () => {
@@ -53,9 +53,12 @@ const MessageDialog = () => {
           </div>
 
           <div className="d-flex justify-content-center align-items-center footer">
-            <Button variant="outlined" className="button" onClick={onOkButtonHandler}>
+            {/* <Button variant="outlined" className="button" onClick={onOkButtonHandler}>
               OK
-            </Button>
+            </Button> */}
+            <button type="submit" className="btn btn-primary btn-sm px-5 button" onClick={onOkButtonHandler}>
+          Đồng ý 
+          </button>
           </div>
         </Card>
       </Modal>

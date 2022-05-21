@@ -9,15 +9,7 @@ function Footer(props) {
         <div className="footer_item_content">
           <p>
             <span> liên hệ đặt hàng </span>
-            <span className="active">12345678</span>
-          </p>
-          <p>
-            <span> liên hệ đặt hàng </span>
-            <span className="active">12345678</span>
-          </p>
-          <p>
-            <span> liên hệ đặt hàng </span>
-            <span className="active">12345678</span>
+            <span className="active">0912 234 934</span>
           </p>
         </div>
       </div>

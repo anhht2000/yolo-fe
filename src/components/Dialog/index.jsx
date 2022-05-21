@@ -1,2 +1,2 @@
-// export { default as ConfirmDialog } from "./ConfirmDialog";
-// export { default as MessageDialog } from "./MessageDialog";
+export { default as ConfirmDialog } from "./ConfirmDialog";
+export { default as MessageDialog } from "./MessageDialog";

@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { call, put, takeLatest } from "redux-saga/effects";
+import { fetch } from "../../api/axiosClient";
 import { changeMessageDialog, fetchWithLock, lockScreen, setIsLoading, unLockScreen } from "../reducers/common.reducer";
 
 function* handleFetcher({ payload }) {
@@ -8,16 +9,18 @@ function* handleFetcher({ payload }) {
   const { data, successCallback, errorCallback } = payload;
   // call axios for request
   try {
+    // Promise<Response>
     const response = yield call(fetch, data);
-    console.log(response);
 
     const dataResponse = {
       status: 0,
-      // result: response.data,
+      result: response.data,
     };
     // handle success
     successCallback && successCallback(dataResponse);
   } catch (error) {
+    console.log('errr',error);
+    
     const response = error;
     // if response status is 401 or 403 mean Unauthorized.
     if (response?.status === 401 || response?.status === 403) {
@@ -27,8 +30,8 @@ function* handleFetcher({ payload }) {
           open: true,
           data: {
             type: "ERROR",
-            title: "Authentication failed.",
-            message: "Authentication failed.",
+            title: "Thông báo",
+            message: "Đăng nhập thất bại",
           },
         })
       );
@@ -49,8 +52,8 @@ function* handleFetcher({ payload }) {
           open: true,
           data: {
             type: "ERROR",
-            title: "An Error Occurred.",
-            message: error?.message || "An Error Occurred.",
+            title: "Thông báo",
+            message: error?.message || "Có lỗi xuất hiện",
           },
         })
       );

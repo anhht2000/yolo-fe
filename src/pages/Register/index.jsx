@@ -6,13 +6,15 @@ import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
 import authApi from "../../api/authApi.js";
 import { toast } from "react-toastify";
+import "./style.scss";
+import useAuth from "../../hooks/auth.hook.js";
 
 const schema = yup.object().shape({
-  email: yup.string().email("Hãy nhập định dạng email").required("Bạn phải nhập email"),
-  password: yup.string().min(5, "Bạn phải nhập mật khẩu").required("Bạn phải nhập mật khẩu"),
+  email: yup.string().email("Email không đúng định dạng").required("Bạn phải nhập email"),
+  password: yup.string().min(5, "Bạn phải nhập mật khẩu với tối thiểu 5 ký tự").required("Bạn phải nhập mật khẩu"),
   confirm: yup.string().oneOf([yup.ref("password")], "Mật khẩu không tương ứng"),
-  firstname: yup.string().required("Bạn phải nhập họ").typeError("Bạn phải nhập họ là ký tự"),
-  lastname: yup.string().required("Bạn phải nhập tên").typeError("Bạn phải nhập tên là ký tự"),
+  first_name: yup.string().required("Bạn phải nhập họ").typeError("Bạn phải nhập họ là ký tự"),
+  last_name: yup.string().required("Bạn phải nhập tên").typeError("Bạn phải nhập tên là ký tự"),
   phone: yup
     .number()
     .required("Bạn phải nhập số điện thoại")
@@ -25,6 +27,7 @@ export default function Register() {
   const [isShowPass, setIsShowPass] = useState(false);
   const [isShowConfirm, setIsShowConfirm] = useState(false);
   const history = useNavigate();
+  const { register: registerUser } = useAuth();
   const {
     register,
     handleSubmit,
@@ -40,13 +43,17 @@ export default function Register() {
   const onSubmit = async (data) => {
     data.phone = "0" + String(data?.phone);
     try {
-      const dt = await authApi.signUp(data);
-      if (dt.status === 201) {
-        toast.success("Đăng ký thành công. Vui lòng kiểm tra email để kích hoạt tài khoản");
-        history.replace("/login");
-      } else {
-        toast.error("Đăng ký thất bại");
-      }
+      registerUser({
+        ...data,
+        successCallback: (response) => {
+          if (response.result?.success) {
+            toast.success("Đăng ký thành công. Vui lòng đăng nhập để tiếp tục");
+            history("/login");
+          } else {
+            toast.error("Đăng ký thất bại");
+          }
+        },
+      });
     } catch (error) {
       toast.error("Đăng ký thất bại");
     }
@@ -132,24 +139,26 @@ export default function Register() {
           <div className="form-outline mb-3 col col-6">
             <input
               type="text"
-              {...register("firstname")}
-              defaultValue={getValues("firstname")}
+              {...register("first_name")}
+              defaultValue={getValues("first_name")}
               onMouseDown={handleMouseDown}
-              className={errors.firstname ? "form-control form-control-lg form__error" : "form-control form-control-lg"}
+              className={
+                errors.first_name ? "form-control form-control-lg form__error" : "form-control form-control-lg"
+              }
               placeholder="Họ"
             />
-            <p className="text__error">{errors.firstname?.message}</p>
+            <p className="text__error">{errors.first_name?.message}</p>
           </div>
           <div className="form-outline mb-3 col col-6">
             <input
               type="text"
-              {...register("lastname")}
-              defaultValue={getValues("lastname")}
+              {...register("last_name")}
+              defaultValue={getValues("last_name")}
               onMouseDown={handleMouseDown}
-              className={errors.lastname ? "form-control form-control-lg form__error" : "form-control form-control-lg"}
+              className={errors.last_name ? "form-control form-control-lg form__error" : "form-control form-control-lg"}
               placeholder="Tên"
             />
-            <p className="text__error">{errors.lastname?.message}</p>
+            <p className="text__error">{errors.last_name?.message}</p>
           </div>
         </div>
 

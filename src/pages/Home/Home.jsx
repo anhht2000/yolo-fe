@@ -12,8 +12,19 @@ import Popular from "../../components/Popular";
 import heroSliderData from "../../assets/fake-data/slide";
 import policy from "../../assets/fake-data/policy";
 import data from "../../assets/fake-data/product";
+import { useAppSelector } from "../../hooks/redux.hook";
+import { getIsLogin } from "../../redux/reducers/auth.reducer";
+import { useNavigate } from "react-router-dom";
 
 function Home(props) {
+  const isLogin = useAppSelector(getIsLogin)
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if(!isLogin){
+      navigate('/login')
+    }
+  }, []);
   // console.log(heroSliderData);
   const sellingDatas = data.getProducts(4);
   const newDatas = data.getProducts(8);
