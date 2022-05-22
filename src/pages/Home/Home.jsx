@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import banner from "../../assets/images/banner.png";
 
 import Helmet from "../../components/Helmet";
@@ -15,17 +15,46 @@ import data from "../../assets/fake-data/product";
 import { useAppSelector } from "../../hooks/redux.hook";
 import { getIsLogin } from "../../redux/reducers/auth.reducer";
 import { useNavigate } from "react-router-dom";
+import useHome from "../../hooks/home.hook";
 
 function Home(props) {
-  const isLogin = useAppSelector(getIsLogin)
-  const navigate = useNavigate()
-  
+  const [popularProduct, setPopularProduct] = useState([]);
+  const [sellProduct, setSellProduct] = useState([]);
+  const [newProduct, setNewProduct] = useState([]);
+  const isLogin = useAppSelector(getIsLogin);
+  const navigate = useNavigate();
+  const { getProduct } = useHome();
+
   useEffect(() => {
-    if(!isLogin){
-      navigate('/login')
+    if (!isLogin) {
+      navigate("/login");
+    } else {
+      getProduct({
+        option: "POPULAR",
+        successCallback: (response) => {
+          if (response.result?.success) {
+            setPopularProduct(response.result.payload?.data);
+          }
+        },
+      });
+      getProduct({
+        option: "BESTSELLER",
+        successCallback: (response) => {
+          if (response.result?.success) {
+            setSellProduct(response.result.payload?.data);
+          }
+        },
+      });
+      getProduct({
+        option: "NEW",
+        successCallback: (response) => {
+          if (response.result?.success) {
+            setNewProduct(response.result.payload?.data);
+          }
+        },
+      });
     }
   }, []);
-  // console.log(heroSliderData);
   const sellingDatas = data.getProducts(4);
   const newDatas = data.getProducts(8);
   const popularDatas = data.getProducts(12);
@@ -41,13 +70,13 @@ function Home(props) {
         <h1>sản phẩm bán chạy trong tuần</h1>
       </SectionTitle>
       <Section>
-        <Selling sellings={sellingDatas} />
+        <Selling sellings={sellProduct?.slice(0,4)} />
       </Section>
       <SectionTitle>
         <h1>sản phẩm mới</h1>
       </SectionTitle>
       <Section>
-        <New news={newDatas} />
+        <New news={newProduct?.slice(0,4)} />
       </Section>
       <Section>
         <img className="home__banner" src={banner} alt="banner" />
@@ -56,7 +85,7 @@ function Home(props) {
         <h1>phổ biến</h1>
       </SectionTitle>
       <Section>
-        <Popular populars={popularDatas} />
+        <Popular populars={popularProduct?.slice(0,4)} />
       </Section>
     </Helmet>
   );

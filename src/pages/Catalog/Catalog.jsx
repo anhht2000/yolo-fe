@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-pascal-case */
 import React, { useState, useCallback, useEffect, useRef } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import Helmet from "../../components/Helmet";
@@ -9,6 +10,9 @@ import colors from "../../assets/fake-data/product-color";
 import sizes from "../../assets/fake-data/product-size";
 import categorys from "../../assets/fake-data/category";
 import productData from "../../assets/fake-data/product";
+import useProduct from "../../hooks/product.hook";
+import { Pagination, Stack } from "@mui/material";
+import { Box } from "@mui/system";
 
 function Products() {
   const initFilter = {
@@ -18,10 +22,29 @@ function Products() {
   };
 
   const productList = productData.getAllProducts();
-
   const [products, setProducts] = useState(productList);
-
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState(1);
   const [filter, setFilter] = useState(initFilter);
+
+  const { getProduct } = useProduct();
+
+  useEffect(() => {
+    getProduct({
+      page,
+      per_page: 9,
+      successCallback: (response) => {
+        if (response.result?.success) {
+          setProducts(response.result.payload?.data);
+          setTotalPage(response.result.payload?.total);
+        }
+      },
+    });
+  }, [page]);
+
+  const handleChange = (event, value) => {
+    setPage(value);
+  };
 
   const filterSelect = (type, checked, item) => {
     if (checked) {
@@ -160,6 +183,10 @@ function Products() {
         </div>
         <List_Products products={products} />
       </div>
+      <Stack direction='row'>
+        <div className="page_ex"></div>
+        <Pagination count={totalPage} color="primary" className="pagina" onChange={handleChange}/>
+      </Stack>
     </Helmet>
   );
 }

@@ -85,12 +85,12 @@
       & span:first-child {
         color: $dark;
         font-weight: 700;
-        font-size: var(--lineHeight);
+        font-size: 1.5rem;
         line-height: var(--lineHeight);
       }
       & span:last-child {
         color: $text-color;
-        font-size: 1.6rem;
+        font-size: 1.3rem;
         line-height: var(--lineHeight);
         font-weight: 500;
       }
@@ -118,4 +118,20 @@
 }
 .product-blue {
   background-color: blue;
+}
+
+.pagina {
+  width: 80%;
+  display: flex;
+  justify-content: center;
+}
+.page_ex {
+  width: 20%;
+}
+.MuiPaginationItem-root.Mui-selected {
+  color: #fff;
+  background-color: #4267b2 !important;
+}
+.MuiPaginationItem-root {
+  font-size: 1.5rem !important;
 }

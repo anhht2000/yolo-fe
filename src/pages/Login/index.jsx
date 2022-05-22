@@ -35,7 +35,6 @@ export default function Login() {
   };
   const onSubmit = async (data) => {
     try {
-      console.log("dataa", data);
       login({
         ...data,
         successCallback: (response) => {
@@ -44,7 +43,7 @@ export default function Login() {
             localStorage.setItem("token", response.result.payload?.token);
             dispatch(actionLoginSuccess({ user: response.result.payload?.user }));
             toast.success("Đăng nhập thành công");
-            history("/login");
+            history("/");
           } else {
             toast.error("Đăng nhập thất bại");
           }

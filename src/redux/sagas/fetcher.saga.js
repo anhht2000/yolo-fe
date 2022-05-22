@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { call, put, takeLatest } from "redux-saga/effects";
+import { call, put, takeEvery, takeLatest } from "redux-saga/effects";
 import { fetch } from "../../api/axiosClient";
 import { changeMessageDialog, fetchWithLock, lockScreen, setIsLoading, unLockScreen } from "../reducers/common.reducer";
 
@@ -70,5 +70,5 @@ function* handleFetcher({ payload }) {
 }
 
 export default function* fetcher() {
-  yield takeLatest(fetchWithLock, handleFetcher);
+  yield takeEvery(fetchWithLock, handleFetcher);
 }
