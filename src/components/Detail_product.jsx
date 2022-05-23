@@ -2,19 +2,37 @@ import React, { useState, useEffect } from "react";
 import { useCart } from "react-use-cart";
 import { Link } from "react-router-dom";
 import FormatNumber from "../number/FormatNumber";
+import { API } from "../constants/api.constants";
+import * as _ from "lodash";
 
 function DetailProduct({ datas }) {
   const { addItem } = useCart();
   const [image, setImage] = useState("");
+  const [price, setPrice] = useState("0");
+  const [optionSearch, setOptionSearch] = useState([]); //[valueId]
+  const [options, setOptions] = useState({});
   const [statusDescription, setStatusDescription] = useState(false);
   const [quantity, setquantity] = useState();
   const [color, setColor] = useState(undefined);
   const [size, setSize] = useState(undefined);
   const [target, setTarget] = useState();
   useEffect(() => {
-    setImage(datas.image01);
+    setImage(datas.images?.[0]?.path);
+    setPrice(datas?.product_options?.[0]?.price);
     setquantity(1);
+    const data = _.groupBy(datas?.product_options, ({ option }) => option.id);
+    setOptions(data);
   }, [datas]);
+
+  const handleSelect = (valueId) => {
+    if (optionSearch.indexOf(valueId) === -1) {
+      setOptionSearch([...optionSearch, valueId]);
+    } else {
+      const index = optionSearch.indexOf(valueId);
+      setOptionSearch([...optionSearch.slice(0, index), ...optionSearch.slice(index + 1)]);
+    }
+  };
+
   const checkDataToCart = {
     id: datas.id,
     title: datas.title,
@@ -24,7 +42,6 @@ function DetailProduct({ datas }) {
     quantity: quantity,
     price: datas.price,
   };
-  console.log(checkDataToCart);
   const handlequantityP = () => {
     setquantity((e) => e + 1);
   };
@@ -35,59 +52,81 @@ function DetailProduct({ datas }) {
     setStatusDescription((p) => !p);
   };
 
+  console.log("aaa", datas?.product_options);
+
   return (
     <div className="detail-product">
       <div className="detail-product__wrap">
         <div className="detail-product__wrap__slide-1">
           <img
-            src={datas.image01}
+            src={`${API.BASE_URL_IMAGE}${datas.images?.[0]?.path}`}
             alt=""
             className="detail-product__wrap__slide-1__img"
             onClick={() => {
-              setImage(datas.image01);
+              setImage(datas.images?.[0]?.path);
             }}
           />
           <img
-            src={datas.image02}
+            src={`${API.BASE_URL_IMAGE}${datas.images?.[1]?.path}`}
             alt=""
             className="detail-product__wrap__slide-1__img"
             onClick={() => {
-              setImage(datas.image02);
+              setImage(datas.images?.[1]?.path);
             }}
           />
         </div>
         <div className="detail-product__wrap__slide-2">
-          <img src={image} alt="" className="detail-product__wrap__slide-2__img" />
+          <img src={`${API.BASE_URL_IMAGE}${image}`} alt="" className="detail-product__wrap__slide-2__img" />
         </div>
         <div className="detail-product__wrap__slide-3">
-          <h2 className="detail-product__wrap__slide-3__title">{datas.title}</h2>
-          <p className="detail-product__wrap__slide-3__price">{FormatNumber(datas.price)}</p>
-          <p className="detail-product__wrap__slide-3__labe">màu sắc</p>
-          <div className="detail-product__wrap__slide-3-list__color">
-            {datas.colors.map((item, i) => (
-              <span
-                onClick={() => {
-                  setColor(item);
-                }}
-                className={`product-${item} ${color === item ? "active" : ""}`}
-                key={i}
-              ></span>
+          <h2 className="detail-product__wrap__slide-3__title">{datas?.name}</h2>
+          <p className="detail-product__wrap__slide-3__price">
+            {price?.toLocaleString("it-IT", {
+              style: "currency",
+              currency: "VND",
+            }) || 0}
+          </p>
+          {Object.keys(options).length > 0 &&
+            Object.values(options)?.map((option) => (
+              <>
+                {console.log("opt", option)}
+                <p className="detail-product__wrap__slide-3__labe">{option?.[0]?.option?.name}</p>
+                {option?.[0]?.option?.type === "color" ? (
+                  <div className="detail-product__wrap__slide-3-list__color">
+                    {option.length > 0 &&
+                      option.map((e) => (
+                        <>
+                          <span
+                            onClick={() => {
+                              handleSelect(e.value?.id);
+                            }}
+                            style={{ backgroundColor: e.value?.name }}
+                            className={optionSearch.includes(e.value?.id) ? "active" : ""}
+                            // key={i}
+                          />
+                        </>
+                      ))}
+                  </div>
+                ) : (
+                  <div className="detail-product__wrap__slide-3-list__color">
+                    {option.length > 0 &&
+                      option.map((e) => (
+                        <>
+                          <span
+                            onClick={() => {
+                              handleSelect(e.value?.id);
+                            }}
+                            style={{ backgroundColor: e.value?.name }}
+                            className={optionSearch.includes(e.value?.id) ? "active" : ""}
+                          >
+                            {e.value?.name}
+                          </span>
+                        </>
+                      ))}
+                  </div>
+                )}
+              </>
             ))}
-          </div>
-          <p className="detail-product__wrap__slide-3__labe">kích cỡ</p>
-          <div className="detail-product__wrap__slide-3-list__size">
-            {datas.size.map((item, i) => (
-              <span
-                onClick={() => {
-                  setSize(item);
-                }}
-                className={`${size === item ? "active" : ""}`}
-                key={i}
-              >
-                {item}
-              </span>
-            ))}
-          </div>
           <p className="detail-product__wrap__slide-3__labe">số lượng</p>
           <div className="detail-product__wrap__slide-3__quantity">
             <span onClick={handlequantityM}>-</span>

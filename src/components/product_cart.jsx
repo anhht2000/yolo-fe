@@ -4,10 +4,10 @@ import { API } from "../constants/api.constants";
 import FormatNumber from "../number/FormatNumber";
 
 function ProductCart(props) {
-  console.log("aaa", props.datas, props.datas.product_options[0]?.price);
+  console.log('aaa',props.datas)
   return (
     <div className="product__item">
-      <Link to={`/catalog/${props.datas.slug}`}>
+      <Link to={`/catalog/${props.datas?.id}`}>
         <div className="product__item__image">
           <img
             src={`${API.BASE_URL_IMAGE}${props.datas.images[0]?.path}`}
@@ -36,7 +36,7 @@ function ProductCart(props) {
         </p>
         <div className="button">
           <span>
-            <Link to={`/catalog/${props.datas.slug}`}>mua ngay</Link>
+            <Link to={`/catalog/${props.datas?.id}`}>mua ngay</Link>
           </span>
         </div>
       </div>

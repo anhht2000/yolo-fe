@@ -11,6 +11,7 @@ export const API = {
   CONFIRMPASSWORD: "",
   GETHOME: "/admin/product/show",
   PRODUCT: "/admin/product",
+  OPTION:'/admin/option',
 
   BOAT_ROUTE: "boat-routes",
   SEARCH_BOAT: "search",

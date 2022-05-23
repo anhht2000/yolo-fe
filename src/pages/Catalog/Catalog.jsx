@@ -20,14 +20,14 @@ function Products() {
     color: [],
     size: [],
   };
-
+  const [optionSearch, setOptionSearch] = useState([]); //[valueId]
+  const [options, setOptions] = useState([]); //[valueId]
   const productList = productData.getAllProducts();
   const [products, setProducts] = useState(productList);
   const [page, setPage] = useState(1);
   const [totalPage, setTotalPage] = useState(1);
   const [filter, setFilter] = useState(initFilter);
-
-  const { getProduct } = useProduct();
+  const { getProduct, getOptions } = useProduct();
 
   useEffect(() => {
     getProduct({
@@ -42,9 +42,44 @@ function Products() {
     });
   }, [page]);
 
+  useEffect(() => {
+    getOptions({
+      successCallback: (response) => {
+        if (response.result?.success) {
+          setOptions(response.result.payload?.data);
+        }
+      },
+    });
+  }, []);
+
+  console.log("aaa", optionSearch);
+
   const handleChange = (event, value) => {
     setPage(value);
   };
+
+  const handleCheckbox = (valueId) => {
+    if (optionSearch.indexOf(valueId) === -1) {
+      setOptionSearch([...optionSearch, valueId]);
+    } else {
+      const index = optionSearch.indexOf(valueId);
+      setOptionSearch([...optionSearch.slice(0, index), ...optionSearch.slice(index + 1)]);
+    }
+  };
+
+  useEffect(() => {
+    getProduct({
+      page,
+      per_page: 9,
+      options: optionSearch,
+      successCallback: (response) => {
+        if (response.result?.success) {
+          setProducts(response.result.payload?.data);
+          setTotalPage(response.result.payload?.total);
+        }
+      },
+    });
+  }, [optionSearch]);
 
   const filterSelect = (type, checked, item) => {
     if (checked) {
@@ -123,22 +158,26 @@ function Products() {
           <div className="catalog__filter__close" onClick={() => showHideFilter()}>
             <BsArrowLeft />
           </div>
-          <div className="catalog__filter__widget">
-            <div className="catalog__filter__widget__title">danh mục sản phẩm</div>
-            <div className="catalog__filter__widget__content">
-              {categorys.map((item, index) => (
-                <div key={index} className="catalog__filter__widget__content__item">
-                  <CheckBox
-                    label={item.display}
-                    onChange={(input) => filterSelect("CATEGORY", input.checked, item)}
-                    checked={filter.category.includes(item.categorySlug)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
 
-          <div className="catalog__filter__widget">
+          {options.length > 0 &&
+            options.map((option) => (
+              <div className="catalog__filter__widget">
+                <div className="catalog__filter__widget__title">{option?.name}</div>
+                <div className="catalog__filter__widget__content">
+                  {option?.values.map((item, index) => (
+                    <div key={index} className="catalog__filter__widget__content__item">
+                      <CheckBox
+                        label={item.name}
+                        onChange={() => handleCheckbox(item?.id)}
+                        checked={!!optionSearch.includes(item?.id)}
+                      />
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+
+          {/* <div className="catalog__filter__widget">
             <div className="catalog__filter__widget__title">màu sắc</div>
             <div className="catalog__filter__widget__content">
               {colors.map((item, index) => (
@@ -166,7 +205,7 @@ function Products() {
                 </div>
               ))}
             </div>
-          </div>
+          </div> */}
 
           <div className="catalog__filter__widget">
             <div className="catalog__filter__widget__content">
@@ -183,9 +222,9 @@ function Products() {
         </div>
         <List_Products products={products} />
       </div>
-      <Stack direction='row'>
+      <Stack direction="row">
         <div className="page_ex"></div>
-        <Pagination count={totalPage} color="primary" className="pagina" onChange={handleChange}/>
+        <Pagination count={totalPage} color="primary" className="pagina" onChange={handleChange} />
       </Stack>
     </Helmet>
   );
