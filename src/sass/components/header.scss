@@ -130,6 +130,57 @@
     color: $dark;
     text-align: end;
     z-index: 2000;
+    display: flex;
+    justify-content: flex-end;
+    img {
+      width: 40px;
+      height: 40px;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+    .info-user {
+      position: relative;
+    }
+    .info-user:hover {
+      .sub-avt {
+        display: block;
+      }
+    }
+    .sub-avt {
+      position: absolute;
+      right: 0;
+      display: none;
+      margin: 0;
+      font-size: 1.1rem;
+      top: 100%;
+      list-style: none;
+      box-shadow: 3px 4px #888888;
+      padding: 0.7rem 0.2rem;
+      border-radius: 0.5rem;
+      z-index: 101;
+      width: 150%;
+
+      &::after {
+        content: "";
+        height: 15px;
+        position: absolute;
+        top: -15px;
+        z-index: 100;
+        width: 100%;
+        left: 0;
+      }
+      li {
+        padding: 0.5rem 0;
+        span,
+        a {
+          color: black;
+        }
+        span,
+        a:hover {
+          color: $primary;
+        }
+      }
+    }
     span:not(:last-child) {
       padding-right: 3rem;
       @include sm-screen {

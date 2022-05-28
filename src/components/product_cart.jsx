@@ -4,7 +4,6 @@ import { API } from "../constants/api.constants";
 import FormatNumber from "../number/FormatNumber";
 
 function ProductCart(props) {
-  console.log('aaa',props.datas)
   return (
     <div className="product__item">
       <Link to={`/catalog/${props.datas?.id}`}>

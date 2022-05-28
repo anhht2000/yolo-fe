@@ -16,6 +16,8 @@ function* handleFetcher({ payload }) {
       status: 0,
       result: response.data,
     };
+    console.log('zooo')
+
     // handle success
     successCallback && successCallback(dataResponse);
   } catch (error) {

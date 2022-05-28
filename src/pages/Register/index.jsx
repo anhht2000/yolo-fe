@@ -189,7 +189,7 @@ export default function Register() {
           <button type="submit" className="btn btn-primary btn-sm px-5">
             Đăng ký
           </button>
-          <p className="small fw-bold mt-2 pt-1 mb-0 fs-6">
+          <p className="small fw-bold mt-2 pt-1 mb-0">
             Bạn có tài khoản?{" "}
             <Link to="/login" className="link-danger">
               Đăng nhập

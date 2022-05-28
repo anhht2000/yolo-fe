@@ -11,11 +11,7 @@ export const API = {
   CONFIRMPASSWORD: "",
   GETHOME: "/admin/product/show",
   PRODUCT: "/admin/product",
-  OPTION:'/admin/option',
-
-  BOAT_ROUTE: "boat-routes",
-  SEARCH_BOAT: "search",
-  BOOKING_SEAT: "seats",
-  CAL_PRICE: "calculator-price",
-  BOOKING: "",
+  OPTION: "/admin/option",
+  BOOKING: "/admin/receipt",
+  GET_BOOKING: "/admin/receipt/user",
 };

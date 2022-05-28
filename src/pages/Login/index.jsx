@@ -143,7 +143,7 @@ export default function Login() {
           <button type="submit" className="btn btn-primary btn-sm px-5">
             Đăng nhập
           </button>
-          <p className="small fw-bold mt-2 pt-1 mb-0 fs-6">
+          <p className="small fw-bold mt-2 pt-1 mb-0">
             Bạn chưa có tài khoản?{" "}
             <Link to="/register" className="link-danger">
               Đăng ký

@@ -66,3 +66,10 @@ a.active {
 .products {
   display: flex;
 }
+
+.btn-sm,
+.btn-group-sm > .btn {
+  padding: 0.25rem 0.5rem;
+  font-size: 1.275rem;
+  border-radius: 0.2rem;
+}

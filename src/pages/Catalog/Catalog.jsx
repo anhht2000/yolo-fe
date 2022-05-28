@@ -13,8 +13,20 @@ import productData from "../../assets/fake-data/product";
 import useProduct from "../../hooks/product.hook";
 import { Pagination, Stack } from "@mui/material";
 import { Box } from "@mui/system";
+import { useAppSelector } from "../../hooks/redux.hook";
+import { getIsLogin } from "../../redux/reducers/auth.reducer";
+import { useNavigate } from "react-router-dom";
 
 function Products() {
+  const isLogin = useAppSelector(getIsLogin)
+  const navigate = useNavigate()
+  
+  useEffect(() => {
+    if(!isLogin){
+      navigate('/login')
+    }
+  }, []);
+
   const initFilter = {
     category: [],
     color: [],
@@ -52,7 +64,6 @@ function Products() {
     });
   }, []);
 
-  console.log("aaa", optionSearch);
 
   const handleChange = (event, value) => {
     setPage(value);
@@ -81,43 +92,8 @@ function Products() {
     });
   }, [optionSearch]);
 
-  const filterSelect = (type, checked, item) => {
-    if (checked) {
-      switch (type) {
-        case "CATEGORY":
-          setFilter({
-            ...filter,
-            category: [...filter.category, item.categorySlug],
-          });
-          break;
-        case "COLOR":
-          setFilter({ ...filter, color: [...filter.color, item.color] });
-          break;
-        case "SIZE":
-          setFilter({ ...filter, size: [...filter.size, item.size] });
-          break;
-        default:
-      }
-    } else {
-      switch (type) {
-        case "CATEGORY":
-          const newCategory = filter.category.filter((e) => e !== item.categorySlug);
-          setFilter({ ...filter, category: newCategory });
-          break;
-        case "COLOR":
-          const newColor = filter.color.filter((e) => e !== item.color);
-          setFilter({ ...filter, color: newColor });
-          break;
-        case "SIZE":
-          const newSize = filter.size.filter((e) => e !== item.size);
-          setFilter({ ...filter, size: newSize });
-          break;
-        default:
-      }
-    }
-  };
 
-  const clearFilter = () => setFilter(initFilter);
+  const clearFilter = () => setOptionSearch([]);
 
   const updateProducts = useCallback(() => {
     let temp = productList;
@@ -153,7 +129,6 @@ function Products() {
   return (
     <Helmet title="catelog">
       <div className="products">
-        {/* <Filter change={filterSelect} colors={colors} sizes={sizes} categorys={categorys} /> */}
         <div className="catalog__filter" ref={filterRef}>
           <div className="catalog__filter__close" onClick={() => showHideFilter()}>
             <BsArrowLeft />
@@ -177,35 +152,6 @@ function Products() {
               </div>
             ))}
 
-          {/* <div className="catalog__filter__widget">
-            <div className="catalog__filter__widget__title">màu sắc</div>
-            <div className="catalog__filter__widget__content">
-              {colors.map((item, index) => (
-                <div key={index} className="catalog__filter__widget__content__item">
-                  <CheckBox
-                    label={item.display}
-                    onChange={(input) => filterSelect("COLOR", input.checked, item)}
-                    checked={filter.color.includes(item.color)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="catalog__filter__widget">
-            <div className="catalog__filter__widget__title">kích cỡ</div>
-            <div className="catalog__filter__widget__content">
-              {sizes.map((item, index) => (
-                <div key={index} className="catalog__filter__widget__content__item">
-                  <CheckBox
-                    label={item.display}
-                    onChange={(input) => filterSelect("SIZE", input.checked, item)}
-                    checked={filter.size.includes(item.size)}
-                  />
-                </div>
-              ))}
-            </div>
-          </div> */}
 
           <div className="catalog__filter__widget">
             <div className="catalog__filter__widget__content">

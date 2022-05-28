@@ -8,6 +8,8 @@ import Catalog from "../pages/Catalog/Catalog";
 import Cart from "../pages/Cart/Cart";
 import Login from "../pages/Login";
 import Register from "../pages/Register";
+import History from "../pages/History";
+import { DetailOrder } from "../pages/History/DetailOrder";
 
 function Routess() {
   return (
@@ -19,7 +21,8 @@ function Routess() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-        {/* <Route path="/register" element={<Register />} /> */}
+        <Route path="/history" element={<History />} />
+        <Route path="/detail-receipt/:id" element={<DetailOrder />} />
       </Routes>
     </CartProvider>
   );

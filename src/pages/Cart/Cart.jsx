@@ -1,25 +1,88 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useCart } from "react-use-cart";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import Helmet from "../../components/Helmet";
 import { Section } from "../../components/Section";
 import { RiDeleteBin2Line } from "react-icons/ri";
 import FormatNumber from "../../number/FormatNumber";
+import { useAppDispatch, useAppSelector } from "../../hooks/redux.hook";
+import { actionAddCart, getCart } from "../../redux/reducers/product.reducer";
+import { API } from "../../constants/api.constants";
+import useProduct from "../../hooks/product.hook";
+import { toast } from "react-toastify";
 
 function Cart() {
   const { cartTotal, totalUniqueItems, items, updateItemQuantity, removeItem } = useCart();
-  console.log(items);
+  const dispatch = useAppDispatch();
+  const carts = useAppSelector(getCart);
+  const { booking } = useProduct();
+  const navigate = useNavigate();
+  const [totalPrice, setTotalPrice] = useState("0");
+
+  useEffect(() => {
+    const price = carts.reduce((previousValue, currentValue) => previousValue + currentValue.price, 0);
+    setTotalPrice(price);
+  }, [carts]);
+
+  const handlequantityP = (index, priceInit) => {
+    dispatch(
+      actionAddCart([
+        ...carts.slice(0, index),
+        { ...carts[index], quantity: carts[index]?.quantity + 1, price: priceInit * (carts[index]?.quantity + 1) },
+        ...carts.slice(index + 1),
+      ])
+    );
+  };
+  const handlequantityM = (index, priceInit) => {
+    if (carts[index]?.quantity > 1) {
+      dispatch(
+        actionAddCart([
+          ...carts.slice(0, index),
+          { ...carts[index], quantity: carts[index]?.quantity - 1, price: carts[index]?.price - priceInit },
+          ...carts.slice(index + 1),
+        ])
+      );
+    }
+  };
+
+  const handleRemoveItem = (index) => {
+    dispatch(actionAddCart([...carts.slice(0, index), ...carts.slice(index + 1)]));
+  };
+
+  const BuyProduct = () => {
+    const products = carts.map((cart) => {
+      return { quantity: cart?.quantity, productOptionId: cart?.productOptionId, price: cart?.priceInit };
+    });
+    booking({
+      products,
+      successCallback: (response) => {
+        console.log("res", response);
+        if (response.result?.success) {
+          navigate("/products");
+          dispatch(actionAddCart([]));
+          toast.success("Đặt hàng thành công");
+        }
+      },
+    });
+  };
+
+  console.log("carts", carts);
   return (
     <Helmet title="cart">
       <Section>
         <div className="cart">
           <div className="cart__checkout">
-            <div className="cart__checkout__title">bạn đang có {totalUniqueItems} sản phẩm trong giỏ hàng</div>
+            <div className="cart__checkout__title">bạn đang có {carts?.length} sản phẩm trong giỏ hàng</div>
             <div className="cart__checkout__total">
               <span>thành tiền:</span>
-              <span>{FormatNumber(cartTotal)}</span>
+              <span>
+                {totalPrice?.toLocaleString("it-IT", {
+                  style: "currency",
+                  currency: "VND",
+                }) || 0}
+              </span>
             </div>
-            <div className="button">
+            <div className="button" onClick={BuyProduct}>
               <span>đặt hàng</span>
             </div>
             <div className="button">
@@ -29,20 +92,26 @@ function Cart() {
             </div>
           </div>
           <div className="cart__info">
-            {items.map((item, index) => (
+            {carts.map((item, index) => (
               <div className="cart__info-item" key={index}>
                 <div className="cart__info-item__img">
-                  <img src={item.image} alt="" />
+                  <img src={`${API.BASE_URL_IMAGE}${item.item?.images[0]?.path}`} alt="" />
                 </div>
                 <h3 className="cart__info-item__title">
-                  {item.title}-<span>{item.color}</span>-{item.size}
+                  {item.item?.name}
+                  {item.options?.map((e) => (
+                    <span>-{(item.item.product_options?.find((opt) => opt.value?.id === e)).value?.name}</span>
+                  ))}
                 </h3>
-                <h3 className="cart__info-item__price">{FormatNumber(item.price)}</h3>
+                <h3 className="cart__info-item__price">{FormatNumber(item.priceInit)}</h3>
                 <li className="cart__info-item__quantity">
-                  <span onClick={() => updateItemQuantity(item.id, item.quantity - 1)}>-</span>
+                  <span onClick={() => handlequantityM(index, item.priceInit)}>-</span>
                   <span> {item.quantity}</span>
-                  <span onClick={() => updateItemQuantity(item.id, item.quantity + 1)}>+</span>
-                  <RiDeleteBin2Line className="cart__info-item__quantity-delete" onClick={() => removeItem(item.id)} />
+                  <span onClick={() => handlequantityP(index, item.priceInit)}>+</span>
+                  <RiDeleteBin2Line
+                    className="cart__info-item__quantity-delete"
+                    onClick={() => handleRemoveItem(index)}
+                  />
                 </li>
               </div>
             ))}

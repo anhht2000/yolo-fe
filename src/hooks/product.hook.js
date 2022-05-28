@@ -16,8 +16,6 @@ const useProduct = () => {
       try {
         const method = "GET";
 
-        console.log({ successCallback, errorCallback, page, per_page, name, options });
-
         dispatch(
           fetchWithLock({
             data: {
@@ -27,7 +25,7 @@ const useProduct = () => {
                 page,
                 limit: per_page,
                 name,
-                options: options.length > 0 ? JSON.stringify(options) : null,
+                options: options?.length > 0 ? JSON.stringify(options) : null,
               },
             },
             successCallback,
@@ -95,7 +93,70 @@ const useProduct = () => {
     [dispatch]
   );
 
-  return useMemo(() => ({ getProduct, getOptions, getDetailProduct }), [getProduct, getOptions, getDetailProduct]);
+  /**
+   *API
+   * @param payload
+   */
+  const booking = useCallback(
+    (payload) => {
+      const { successCallback, errorCallback, ...data } = payload;
+      try {
+        const method = "POST";
+
+        dispatch(
+          fetchWithLock({
+            data: {
+              url: API.BOOKING,
+              data,
+              method,
+            },
+            successCallback,
+            errorCallback,
+          })
+        );
+      } catch (error) {
+        errorCallback && errorCallback(error);
+      }
+    },
+    [dispatch]
+  );
+
+  /**
+   *API
+   * @param payload
+   */
+  const historyProduct = useCallback(
+    (payload) => {
+      const { successCallback, errorCallback, page, per_page, name, options, ...data } = payload;
+      try {
+        const method = "GET";
+
+        dispatch(
+          fetchWithLock({
+            data: {
+              url: API.GET_BOOKING,
+              method,
+              params: {
+                page,
+                limit: per_page,
+                name,
+              },
+            },
+            successCallback,
+            errorCallback,
+          })
+        );
+      } catch (error) {
+        errorCallback && errorCallback(error);
+      }
+    },
+    [dispatch]
+  );
+
+  return useMemo(
+    () => ({ getProduct, getOptions, getDetailProduct, booking, historyProduct }),
+    [getProduct, getOptions, getDetailProduct, booking, historyProduct]
+  );
 };
 
 export default useProduct;

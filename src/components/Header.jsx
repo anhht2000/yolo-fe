@@ -1,14 +1,28 @@
 import React from "react";
 import { useState, useEffect, useRef } from "react";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/Logo-2.png";
 import { FaBars, FaTimes, FaSearch, FaCartArrowDown, FaUser } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "../hooks/redux.hook";
+import { actionLogout, getIsLogin, getUser } from "../redux/reducers/auth.reducer";
 
 function Header(props) {
+  const isLogin = useAppSelector(getIsLogin);
+  const user = useAppSelector(getUser);
+  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
+
   const [menu, setMenu] = useState(false);
   const handleToggleMenu = () => {
     setMenu((p) => !p);
   };
+
+  const handleLogout = () => {
+    navigate("/login");
+    localStorage.setItem("token", undefined);
+    dispatch(actionLogout());
+  };
+
   const headerRef = useRef(null);
   useEffect(() => {
     const onScroll = () => {
@@ -46,7 +60,7 @@ function Header(props) {
         <div className="header__logo">
           <img src={logo} alt="" className="header__logo_img" />
         </div>
-        <div className=" header__navRight">
+        <div className="header__navRight">
           <span>
             <FaSearch icon="faSearch" />
           </span>
@@ -56,7 +70,26 @@ function Header(props) {
             </Link>
           </span>
           <span>
-            <FaUser icon="faUser" />
+            {isLogin ? (
+              <div className="info-user">
+                <div className="d-flex align-items-center gap-2 ">
+                  <img src="https://picsum.photos/id/237/200/300" alt="" className="img-avt" />
+                  <h4 className="fs-5">{user?.first_name}</h4>
+                </div>
+                <ul className="sub-avt">
+                  <li className="sub-avt__item">
+                    <Link to="/history">Đơn hàng đã mua</Link>
+                  </li>
+                  <li className="sub-avt__item">
+                    <span onClick={handleLogout}>Đăng xuất</span>
+                  </li>
+                </ul>
+              </div>
+            ) : (
+              <NavLink exact to={"/login"}>
+                <FaUser icon="faUser" />
+              </NavLink>
+            )}
           </span>
         </div>
       </div>

@@ -4,12 +4,19 @@ import { Link } from "react-router-dom";
 import FormatNumber from "../number/FormatNumber";
 import { API } from "../constants/api.constants";
 import * as _ from "lodash";
+import { useAppDispatch, useAppSelector } from "../hooks/redux.hook";
+import { actionAddCart, getCart } from "../redux/reducers/product.reducer";
+import { toast } from "react-toastify";
 
 function DetailProduct({ datas }) {
   const { addItem } = useCart();
+  const dispatch = useAppDispatch();
+  const carts = useAppSelector(getCart);
   const [image, setImage] = useState("");
   const [price, setPrice] = useState("0");
+  const [priceInit, setPriceInit] = useState("0");
   const [optionSearch, setOptionSearch] = useState([]); //[valueId]
+  const [productOptionId, setProductOptionId] = useState([]); //[valueId]
   const [options, setOptions] = useState({});
   const [statusDescription, setStatusDescription] = useState(false);
   const [quantity, setquantity] = useState();
@@ -19,17 +26,28 @@ function DetailProduct({ datas }) {
   useEffect(() => {
     setImage(datas.images?.[0]?.path);
     setPrice(datas?.product_options?.[0]?.price);
+    setPriceInit(datas?.product_options?.[0]?.price);
     setquantity(1);
     const data = _.groupBy(datas?.product_options, ({ option }) => option.id);
     setOptions(data);
   }, [datas]);
 
-  const handleSelect = (valueId) => {
-    if (optionSearch.indexOf(valueId) === -1) {
+  const handleSelect = (valueId, optionId, price, productOptId) => {
+    const indexExist = optionSearch.findIndex((e) => {
+      return options[optionId].map((opt) => opt.value.id).includes(e);
+    });
+    if (optionSearch.indexOf(valueId) === -1 && indexExist === -1) {
       setOptionSearch([...optionSearch, valueId]);
+      setPrice(price);
+      setPriceInit(price);
+      setProductOptionId([...productOptionId, productOptId]);
+    } else if (indexExist !== -1) {
+      setOptionSearch([...optionSearch.slice(0, indexExist), ...optionSearch.slice(indexExist + 1), valueId]);
     } else {
       const index = optionSearch.indexOf(valueId);
       setOptionSearch([...optionSearch.slice(0, index), ...optionSearch.slice(index + 1)]);
+      const indexProduct = productOptionId.indexOf(productOptId);
+      setProductOptionId([...productOptionId.slice(0, indexProduct), ...productOptionId.slice(indexProduct + 1)]);
     }
   };
 
@@ -44,15 +62,29 @@ function DetailProduct({ datas }) {
   };
   const handlequantityP = () => {
     setquantity((e) => e + 1);
+    setPrice(priceInit * (quantity + 1));
   };
   const handlequantityM = () => {
-    setquantity((e) => e - 1);
+    if (quantity > 1) {
+      setquantity((e) => e - 1);
+      setPrice(price - priceInit);
+    }
   };
   const handleStatusDescription = () => {
     setStatusDescription((p) => !p);
   };
 
-  console.log("aaa", datas?.product_options);
+  const handleAddToCart = () => {
+    if (optionSearch.length > 0) {
+      addItem(checkDataToCart);
+      dispatch(
+        actionAddCart([...carts, { item: datas, options: optionSearch, quantity, price, priceInit, productOptionId }])
+      );
+      toast.success("Sản phẩm được thêm vào giỏ hàng thành công");
+    } else {
+      toast.error("Bạn vui lòng chọn tùy chọn sản phẩm");
+    }
+  };
 
   return (
     <div className="detail-product">
@@ -81,7 +113,7 @@ function DetailProduct({ datas }) {
         <div className="detail-product__wrap__slide-3">
           <h2 className="detail-product__wrap__slide-3__title">{datas?.name}</h2>
           <p className="detail-product__wrap__slide-3__price">
-            {price?.toLocaleString("it-IT", {
+            {priceInit?.toLocaleString("it-IT", {
               style: "currency",
               currency: "VND",
             }) || 0}
@@ -89,7 +121,6 @@ function DetailProduct({ datas }) {
           {Object.keys(options).length > 0 &&
             Object.values(options)?.map((option) => (
               <>
-                {console.log("opt", option)}
                 <p className="detail-product__wrap__slide-3__labe">{option?.[0]?.option?.name}</p>
                 {option?.[0]?.option?.type === "color" ? (
                   <div className="detail-product__wrap__slide-3-list__color">
@@ -98,7 +129,7 @@ function DetailProduct({ datas }) {
                         <>
                           <span
                             onClick={() => {
-                              handleSelect(e.value?.id);
+                              handleSelect(e.value?.id, e.option?.id, e?.price, e?.id);
                             }}
                             style={{ backgroundColor: e.value?.name }}
                             className={optionSearch.includes(e.value?.id) ? "active" : ""}
@@ -114,7 +145,7 @@ function DetailProduct({ datas }) {
                         <>
                           <span
                             onClick={() => {
-                              handleSelect(e.value?.id);
+                              handleSelect(e.value?.id, e.option?.id, e?.price, e?.id);
                             }}
                             style={{ backgroundColor: e.value?.name }}
                             className={optionSearch.includes(e.value?.id) ? "active" : ""}
@@ -134,26 +165,16 @@ function DetailProduct({ datas }) {
             <span onClick={handlequantityP}>+</span>
           </div>
           <div className="detail-product__wrap__slide-3-list__btn">
-            <div
-              onClick={() => {
-                if (checkDataToCart.color !== undefined && checkDataToCart.size !== undefined) {
-                  addItem(checkDataToCart);
-                  alert(" đã thêm vào giỏ hàng ");
-                } else {
-                  alert("bạn vui lòng chọn kích cỡ và màu ");
-                }
-              }}
-              className="button"
-            >
+            <div onClick={handleAddToCart} className="button">
               <span> thêm giỏ hàng</span>
             </div>
             <div
               onClick={() => {
-                if (checkDataToCart.color !== undefined && checkDataToCart.size !== undefined) {
+                if (optionSearch.length > 0) {
                   addItem(checkDataToCart);
                   alert(" đã thêm vào giỏ hàng ");
                 } else {
-                  alert("bạn vui lòng chọn kích cỡ và màu ");
+                  alert("bạn vui lòng chọn tùy chọn sản phẩm");
                 }
               }}
               className="button"
