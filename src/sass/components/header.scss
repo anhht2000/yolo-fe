@@ -154,11 +154,11 @@
       font-size: 1.1rem;
       top: 100%;
       list-style: none;
-      box-shadow: 3px 4px #888888;
-      padding: 0.7rem 0.2rem;
+      box-shadow: 3px 4px 11px #888888;
+      padding: 0.7rem 1.2rem;
       border-radius: 0.5rem;
       z-index: 101;
-      width: 150%;
+      width: 148px;
 
       &::after {
         content: "";
@@ -197,3 +197,17 @@
 // .header__navleft.active {
 //   font-size: 30rem;
 // }
+.cart-icon {
+  position: relative;
+  .number {
+    position: absolute;
+    top: 0;
+    right: -50%;
+    background-color: rgb(65, 103, 178);
+    padding: 0 5px;
+    border-radius: 5px;
+    font-size: 1.5rem;
+    color: white;
+
+  }
+}

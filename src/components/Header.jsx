@@ -4,9 +4,11 @@ import { NavLink, Link, useNavigate } from "react-router-dom";
 import logo from "../assets/images/Logo-2.png";
 import { FaBars, FaTimes, FaSearch, FaCartArrowDown, FaUser } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../hooks/redux.hook";
-import { actionLogout, getIsLogin, getUser } from "../redux/reducers/auth.reducer";
+import { actionLogout, getIsLogin, getUser } from "../redux/reducers/auth.reducer";import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { getCart } from "../redux/reducers/product.reducer";
 
 function Header(props) {
+  const carts = useAppSelector(getCart);
   const isLogin = useAppSelector(getIsLogin);
   const user = useAppSelector(getUser);
   const navigate = useNavigate();
@@ -65,8 +67,9 @@ function Header(props) {
             <FaSearch icon="faSearch" />
           </span>
           <span>
-            <Link to="/cart">
+            <Link to="/cart" className="cart-icon">
               <FaCartArrowDown icon="faCartArrowDown" />
+              {carts.length > 0 && <span className="number">{carts.length}</span>}
             </Link>
           </span>
           <span>

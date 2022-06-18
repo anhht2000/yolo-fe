@@ -10,6 +10,7 @@ import { actionAddCart, getCart } from "../../redux/reducers/product.reducer";
 import { API } from "../../constants/api.constants";
 import useProduct from "../../hooks/product.hook";
 import { toast } from "react-toastify";
+import { Box, FormControl, FormControlLabel, FormLabel, Radio, RadioGroup } from "@mui/material";
 
 function Cart() {
   const { cartTotal, totalUniqueItems, items, updateItemQuantity, removeItem } = useCart();
@@ -18,6 +19,7 @@ function Cart() {
   const { booking } = useProduct();
   const navigate = useNavigate();
   const [totalPrice, setTotalPrice] = useState("0");
+  const [method, setMethod] = useState();
 
   useEffect(() => {
     const price = carts.reduce((previousValue, currentValue) => previousValue + currentValue.price, 0);
@@ -50,29 +52,56 @@ function Cart() {
   };
 
   const BuyProduct = () => {
-    const products = carts.map((cart) => {
-      return { quantity: cart?.quantity, productOptionId: cart?.productOptionId, price: cart?.priceInit };
-    });
-    booking({
-      products,
-      successCallback: (response) => {
-        console.log("res", response);
-        if (response.result?.success) {
-          navigate("/products");
-          dispatch(actionAddCart([]));
-          toast.success("Đặt hàng thành công");
-        }
-      },
-    });
+    if (!method) {
+      toast.error("Vui lòng chọn hình thức thanh toán");
+
+    } else {
+      const products = carts.map((cart) => {
+        return { quantity: cart?.quantity, productOptionId: cart?.productOptionId, price: cart?.priceInit };
+      });
+      if (products.length < 1) {
+        toast.error("Không có sản phẩm nảo trong giỏ hàng");
+
+      } else {
+        booking({
+          products,
+          method,
+          successCallback: (response) => {
+            if (response.result?.success) {
+              navigate("/products");
+              dispatch(actionAddCart([]));
+              toast.success("Đặt hàng thành công");
+            }
+          },
+        });
+      }
+    }
   };
 
-  console.log("carts", carts);
   return (
     <Helmet title="cart">
       <Section>
         <div className="cart">
           <div className="cart__checkout">
             <div className="cart__checkout__title">bạn đang có {carts?.length} sản phẩm trong giỏ hàng</div>
+            <div className="cart__checkout__title">Chọn phương thức thanh toán :</div>
+            <Box sx={{ fontSize: '1.4rem' }}>
+              <FormControl>
+                <RadioGroup
+                  row
+                  aria-labelledby="demo-row-radio-buttons-group-label"
+                  name="row-radio-buttons-group"
+                  value={method}
+                  onChange={({ target }) => {
+                    setMethod(target.value)
+                  }}
+                >
+                  <FormControlLabel value="direct" control={<Radio />} label="Thanh toán trực tiếp" />
+                  <FormControlLabel value="banking" control={<Radio />} label="Chuyển khoản đại lý" />
+                  <FormControlLabel value="other" control={<Radio />} label="Khác" />
+                </RadioGroup>
+              </FormControl>
+            </Box>
             <div className="cart__checkout__total">
               <span>thành tiền:</span>
               <span>

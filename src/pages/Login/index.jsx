@@ -39,7 +39,6 @@ export default function Login() {
         ...data,
         successCallback: (response) => {
           if (response.result?.success) {
-            console.log("ress", response.result?.payload);
             localStorage.setItem("token", response.result.payload?.token);
             dispatch(actionLoginSuccess({ user: response.result.payload?.user }));
             toast.success("Đăng nhập thành công");

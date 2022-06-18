@@ -49,6 +49,12 @@ export const DetailOrder = (props) => {
               </span>
             </div>
             <div className="col-12">
+              <span>Hình thức thanh toán:</span>{" "}
+              <span className="order-detail-value">
+                <span className="label-warning status-label font-weight-bold">{data?.method}</span>
+              </span>
+            </div>
+            <div className="col-12">
               <span>Tổng tiền:</span>{" "}
               <span className="order-detail-value font-weight-bold">
                 {data?.total_price?.toLocaleString("it-IT", {

@@ -18,12 +18,12 @@ import { getIsLogin } from "../../redux/reducers/auth.reducer";
 import { useNavigate } from "react-router-dom";
 
 function Products() {
-  const isLogin = useAppSelector(getIsLogin)
-  const navigate = useNavigate()
-  
+  const isLogin = useAppSelector(getIsLogin);
+  const navigate = useNavigate();
+
   useEffect(() => {
-    if(!isLogin){
-      navigate('/login')
+    if (!isLogin) {
+      navigate("/login");
     }
   }, []);
 
@@ -64,7 +64,6 @@ function Products() {
     });
   }, []);
 
-
   const handleChange = (event, value) => {
     setPage(value);
   };
@@ -91,7 +90,6 @@ function Products() {
       },
     });
   }, [optionSearch]);
-
 
   const clearFilter = () => setOptionSearch([]);
 
@@ -135,23 +133,44 @@ function Products() {
           </div>
 
           {options.length > 0 &&
-            options.map((option) => (
-              <div className="catalog__filter__widget">
-                <div className="catalog__filter__widget__title">{option?.name}</div>
-                <div className="catalog__filter__widget__content">
-                  {option?.values.map((item, index) => (
-                    <div key={index} className="catalog__filter__widget__content__item">
-                      <CheckBox
-                        label={item.name}
-                        onChange={() => handleCheckbox(item?.id)}
-                        checked={!!optionSearch.includes(item?.id)}
-                      />
+            options.map((option) => {
+              if (option?.type === "text") {
+                return (
+                  <div className="catalog__filter__widget">
+                    <div className="catalog__filter__widget__title">{option?.name}</div>
+                    <div className="catalog__filter__widget__content">
+                      {option?.values.map((item, index) => (
+                        <div key={index} className="catalog__filter__widget__content__item">
+                          <CheckBox
+                            label={item.name}
+                            onChange={() => handleCheckbox(item?.id)}
+                            checked={!!optionSearch.includes(item?.id)}
+                          />
+                        </div>
+                      ))}
                     </div>
-                  ))}
-                </div>
-              </div>
-            ))}
-
+                  </div>
+                );
+              } else {
+                return (
+                  <div className="catalog__filter__widget">
+                    <div className="catalog__filter__widget__title">{option?.name}</div>
+                    <div className="catalog__filter__widget__content">
+                      {option?.values.map((item, index) => (
+                        <div key={index} className="catalog__filter__widget__content__item d-flex">
+                          <CheckBox
+                            label={""}
+                            onChange={() => handleCheckbox(item?.id)}
+                            checked={!!optionSearch.includes(item?.id)}
+                          />
+                          <span style={{ backgroundColor: item.name, padding:'10px',borderRadius:'5px' }}></span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                );
+              }
+            })}
 
           <div className="catalog__filter__widget">
             <div className="catalog__filter__widget__content">

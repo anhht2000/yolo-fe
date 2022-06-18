@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useCart } from "react-use-cart";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import FormatNumber from "../number/FormatNumber";
 import { API } from "../constants/api.constants";
 import * as _ from "lodash";
@@ -10,6 +10,7 @@ import { toast } from "react-toastify";
 
 function DetailProduct({ datas }) {
   const { addItem } = useCart();
+  const navigate = useNavigate()
   const dispatch = useAppDispatch();
   const carts = useAppSelector(getCart);
   const [image, setImage] = useState("");
@@ -133,7 +134,7 @@ function DetailProduct({ datas }) {
                             }}
                             style={{ backgroundColor: e.value?.name }}
                             className={optionSearch.includes(e.value?.id) ? "active" : ""}
-                            // key={i}
+                          // key={i}
                           />
                         </>
                       ))}
@@ -169,17 +170,9 @@ function DetailProduct({ datas }) {
               <span> thêm giỏ hàng</span>
             </div>
             <div
-              onClick={() => {
-                if (optionSearch.length > 0) {
-                  addItem(checkDataToCart);
-                  alert(" đã thêm vào giỏ hàng ");
-                } else {
-                  alert("bạn vui lòng chọn tùy chọn sản phẩm");
-                }
-              }}
-              className="button"
+              className="button" onClick={() => { handleAddToCart(); navigate('/cart') }}
             >
-              <span>{<Link to="/cart">mua ngay</Link>}</span>
+              <span>mua ngay</span>
             </div>
           </div>
         </div>
