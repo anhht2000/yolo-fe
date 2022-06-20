@@ -27,13 +27,18 @@ function Cart() {
   }, [carts]);
 
   const handlequantityP = (index, priceInit) => {
-    dispatch(
-      actionAddCart([
-        ...carts.slice(0, index),
-        { ...carts[index], quantity: carts[index]?.quantity + 1, price: priceInit * (carts[index]?.quantity + 1) },
-        ...carts.slice(index + 1),
-      ])
-    );
+    if (Number(carts[index]?.quantity) < Number(carts[index]?.number)) {
+      dispatch(
+        actionAddCart([
+          ...carts.slice(0, index),
+          { ...carts[index], quantity: carts[index]?.quantity + 1, price: priceInit * (carts[index]?.quantity + 1) },
+          ...carts.slice(index + 1),
+        ])
+      );
+    } else {
+      toast.error("Số lượng sản phẩm trong kho không đủ để đặt hàng");
+
+    }
   };
   const handlequantityM = (index, priceInit) => {
     if (carts[index]?.quantity > 1) {
