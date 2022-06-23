@@ -1,10 +1,10 @@
-import React from "react";
-import { useState, useEffect, useRef } from "react";
-import { NavLink, Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useRef, useState } from "react";
+import { FaBars, FaCartArrowDown, FaSearch, FaTimes, FaUser } from "react-icons/fa";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/images/Logo-2.png";
-import { FaBars, FaTimes, FaSearch, FaCartArrowDown, FaUser } from "react-icons/fa";
+import Avatar from '../assets/images/products/avartar.jpg';
 import { useAppDispatch, useAppSelector } from "../hooks/redux.hook";
-import { actionLogout, getIsLogin, getUser } from "../redux/reducers/auth.reducer";import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
+import { actionLogout, getIsLogin, getUser } from "../redux/reducers/auth.reducer";
 import { getCart } from "../redux/reducers/product.reducer";
 
 function Header(props) {
@@ -76,7 +76,7 @@ function Header(props) {
             {isLogin ? (
               <div className="info-user">
                 <div className="d-flex align-items-center gap-2 ">
-                  <img src="https://picsum.photos/id/237/200/300" alt="" className="img-avt" />
+                  <img src={Avatar} alt="" className="img-avt" />
                   <h4 className="fs-5">{user?.first_name}</h4>
                 </div>
                 <ul className="sub-avt">

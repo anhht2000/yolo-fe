@@ -73,7 +73,7 @@
           cursor: pointer;
           padding: 2rem;
           &.active {
-            border: 2px solid red;
+            border: 2px solid $primary;
           }
         }
       }

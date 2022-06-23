@@ -126,7 +126,7 @@ function Cart() {
             </div>
           </div>
           <div className="cart__info">
-            {carts.map((item, index) => (
+            {carts?.length > 0 ? carts.map((item, index) => (
               <div className="cart__info-item" key={index}>
                 <div className="cart__info-item__img">
                   <img src={`${API.BASE_URL_IMAGE}${item.item?.images[0]?.path}`} alt="" />
@@ -148,7 +148,7 @@ function Cart() {
                   />
                 </li>
               </div>
-            ))}
+            )) : <h2>Không có sản phẩm nào trong giỏ hàng!!</h2>}
           </div>
         </div>
       </Section>

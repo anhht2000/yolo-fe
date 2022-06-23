@@ -19,7 +19,7 @@ function DetailProduct({ datas }) {
   const [optionSearch, setOptionSearch] = useState([]); //[valueId]
   const [productOptionId, setProductOptionId] = useState([]); //[valueId]
   const [options, setOptions] = useState({});
-  const [statusDescription, setStatusDescription] = useState(false);
+  const [statusDescription, setStatusDescription] = useState(true);
   const [quantity, setquantity] = useState();
   const [color, setColor] = useState(undefined);
   const [size, setSize] = useState(undefined);
@@ -77,7 +77,7 @@ function DetailProduct({ datas }) {
 
   const handleAddToCart = () => {
     if (optionSearch.length > 0) {
-      if (Number(quantity) < Number(datas.product_options[0]?.number)) {
+      if (Number(quantity) <= Number(datas.product_options[0]?.number)) {
         addItem(checkDataToCart);
         dispatch(
           actionAddCart([...carts, { item: datas, options: optionSearch, quantity, number: datas.product_options[0]?.number, price, priceInit, productOptionId }])
@@ -187,12 +187,12 @@ function DetailProduct({ datas }) {
       <div className={`detail-product__description ${statusDescription ? " active" : ""}`}>
         <h1 className="detail-product__description__title">chi tiết sản phẩm</h1>
         <p className="detail-product__description__item" dangerouslySetInnerHTML={{ __html: datas.description }}></p>
-        <span
+        {/* <span
           className={`detail-product__description__btn-hs ${statusDescription ? " active" : ""}`}
           onClick={handleStatusDescription}
         >
           {statusDescription ? "thu gọn" : "xem thêm "}
-        </span>
+        </span> */}
       </div>
     </div>
   );
